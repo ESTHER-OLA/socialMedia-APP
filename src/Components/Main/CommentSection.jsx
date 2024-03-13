@@ -29,6 +29,11 @@ const CommentSection = ({ postId }) => {
 
   const addComment = async (e) => {
     e.preventDefault();
+
+    console.log("comment:", comment.current.value);
+    console.log("image:", user?.photoURL);
+    console.log("name:", userData?.name || user?.displayName);
+
     if (comment.current.value !== "") {
       try {
         await setDoc(commentRef, {
@@ -37,14 +42,14 @@ const CommentSection = ({ postId }) => {
           image: user?.photoURL,
           name:
             userData?.name?.charAt(0)?.toUpperCase() +
-              userData?.name?.slice(1) || user?.displayName?.split(" ")[0],
+              userData?.name?.slice(1) || user?.displayName?.split("")[0],
           timestamp: serverTimestamp(),
         });
         comment.current.value = "";
       } catch (err) {
         dispatch({ type: HANDLE_ERROR });
         alert(err.message);
-        console.log(err.message, addComment);
+        console.log(err.message);
       }
     }
   };
