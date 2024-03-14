@@ -30,10 +30,6 @@ const CommentSection = ({ postId }) => {
   const addComment = async (e) => {
     e.preventDefault();
 
-    console.log("comment:", comment.current.value);
-    console.log("image:", user?.photoURL);
-    console.log("name:", userData?.name || user?.displayName);
-
     if (comment.current.value !== "") {
       try {
         await setDoc(commentRef, {
