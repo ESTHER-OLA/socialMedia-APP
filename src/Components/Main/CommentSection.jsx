@@ -29,24 +29,21 @@ const CommentSection = ({ postId }) => {
 
   const addComment = async (e) => {
     e.preventDefault();
-
-    if (comment.current.value !== "") {
-      try {
+    try {
+      const commentValue = e.target.comment.value;
+      if (commentValue.trim() !== "") {
         await setDoc(commentRef, {
-          id: commentRef.id,
-          comment: comment.current.value,
-          image: user?.photoURL,
-          name:
-            userData?.name?.charAt(0)?.toUpperCase() +
-              userData?.name?.slice(1) || user?.displayName?.split("")[0],
+          comment: commentValue,
           timestamp: serverTimestamp(),
         });
-        comment.current.value = "";
-      } catch (err) {
-        dispatch({ type: HANDLE_ERROR });
-        alert(err.message);
-        console.log(err.message);
+        e.target.comment.value = "";
+      } else {
+        // Handle empty comment input
       }
+    } catch (err) {
+      dispatch({ type: HANDLE_ERROR });
+      alert(err.message);
+      console.log(err.message);
     }
   };
 
