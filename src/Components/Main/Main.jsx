@@ -134,21 +134,37 @@ const Main = () => {
   };
 
   useEffect(() => {
-    const postData = async () => {
+    const fetchData = async () => {
       const q = query(collectionRef, orderBy("timestamp", "asc"));
-      await onSnapshot(q, (doc) => {
-        dispatch({
-          type: SUBMIT_POST,
-          posts: doc?.docs?.map((item) => item?.data()),
-        });
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const postsData = querySnapshot.docs.map((doc) => doc.data());
+        dispatch({ type: SUBMIT_POST, posts: postsData });
         scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
         setImage(null);
         setFile(null);
         setProgressBar(0);
       });
+      return () => unsubscribe();
     };
-    return () => postData();
+    fetchData();
   }, [SUBMIT_POST]);
+
+  // useEffect(() => {
+  //   const postData = async () => {
+  //     const q = query(collectionRef, orderBy("timestamp", "asc"));
+  //     await onSnapshot(q, (doc) => {
+  //       dispatch({
+  //         type: SUBMIT_POST,
+  //         posts: doc?.docs?.map((item) => item?.data()),
+  //       });
+  //       scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
+  //       setImage(null);
+  //       setFile(null);
+  //       setProgressBar(0);
+  //     });
+  //   };
+  //   return () => postData();
+  // }, [SUBMIT_POST]);
 
   return (
     <div className="flex flex-col items-center">
